@@ -2,6 +2,7 @@ package com.evstropova.myapplication;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by evstropova on 07.04.2016.
@@ -63,8 +64,12 @@ public class Message {
     public String getGenresString() {
         StringBuilder stringBuilder = new StringBuilder();
 
-        for (String genre: genres) {
+        for (int i=0; i <= genres.size()-1; i++) {
+            String genre = genres.get(i);
             stringBuilder.append(genre);
+            if (i != genres.size()-1) {
+                stringBuilder.append(", ");
+            }
         }
 
         return stringBuilder.toString();

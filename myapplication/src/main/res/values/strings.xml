@@ -5,7 +5,6 @@
 
     <plurals name="albums">
         <item quantity="one">альбом</item>
-        <item quantity="two">альбома</item>
         <item quantity="few">альбома</item>
         <item quantity="many">альбомов</item>
         <item quantity="other">альбомов</item>

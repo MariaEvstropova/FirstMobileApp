@@ -151,11 +151,12 @@ public class MainActivity extends AppCompatActivity {
 
     public String getStatistics(Message message) {
         StringBuilder statistics = new StringBuilder();
+
         Resources res = getResources();
         statistics.append(message.getAlbums()+" ");
-        statistics.append(res.getQuantityString(R.plurals.albums, (int) message.getAlbums())+", ");
+        statistics.append(res.getQuantityString(R.plurals.albums, (int) message.getAlbums(),(int) message.getAlbums())+", ");
         statistics.append(message.getTracks()+" ");
-        statistics.append(res.getQuantityString(R.plurals.songs, (int) message.getTracks()));
+        statistics.append(res.getQuantityString(R.plurals.songs, (int) message.getTracks(), (int) message.getTracks()));
         return statistics.toString();
     }
 
