@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="singers">Исполнители</string>
+    <string name="URL">http://cache-default06g.cdn.yandex.net/download.cdn.yandex.net/mobilization-2016/artists.json</string>
+
+    <plurals name="albums">
+        <item quantity="one">альбом</item>
+        <item quantity="two">альбома</item>
+        <item quantity="few">альбома</item>
+        <item quantity="many">альбомов</item>
+        <item quantity="other">альбомов</item>
+    </plurals>
+
+    <plurals name="songs">
+        <item quantity="one">песня</item>
+        <item quantity="two">песни</item>
+        <item quantity="few">песни</item>
+        <item quantity="many">песен</item>
+        <item quantity="other">песен</item>
+    </plurals>
+
 </resources>

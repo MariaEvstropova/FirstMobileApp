@@ -1,12 +1,23 @@
 package com.evstropova.myapplication;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.net.Uri;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -26,36 +37,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private List<Message> messages;
-    public static String LOG_TAG = "my_log";
+    private List<Message> messages = new ArrayList<Message>();
+    public ListView listView;
+    public JsonAdapter jsonAdapter;
+    public ParseTask jsonParse = new ParseTask();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.try_relative);
-        ImageView iv = (ImageView) findViewById(R.id.imageView2);
-        iv.setImageResource(R.drawable.image);
-        new ParseTask().execute();
+        setContentView(R.layout.main_layout);
+
+        jsonParse.execute();
+
+        listView = (ListView) findViewById(R.id.list_view);
+        jsonAdapter = new JsonAdapter(this);
+        listView.setAdapter(jsonAdapter);
     }
 
-    public List<Message> readJsonStream(InputStream in) throws IOException {
-        JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
-        try {
-            return readMessagesArray(reader);
-        } finally {
-            reader.close();
-        }
-    }
+    private class JsonAdapter extends ArrayAdapter<Message> {
 
-    public List<Message> readMessagesArray(JsonReader reader) throws IOException {
-        List messages = new ArrayList();
-
-        reader.beginArray();
-        while (reader.hasNext()) {
-            messages.add(readMessage(reader));
+        public JsonAdapter (Context context) {
+            super(context, R.layout.try_relative, messages);
         }
-        reader.endArray();
-        return messages;
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            Message message = getItem(position);
+
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext())
+                        .inflate(R.layout.try_relative, parent, false);
+            }
+
+            ((TextView) convertView.findViewById(R.id.text_genre))
+                    .setText(message.getGenresString());
+
+            ((TextView) convertView.findViewById(R.id.text_statistics))
+                    .setText(getStatistics(message));
+
+            ((Button) convertView.findViewById(R.id.singer_name))
+                    .setText(message.getName());
+
+            return convertView;
+        }
     }
 
     public Message readMessage(JsonReader reader) throws IOException {
@@ -125,12 +149,22 @@ public class MainActivity extends AppCompatActivity {
         return new Cover(small, big);
     }
 
-    private class ParseTask extends AsyncTask<Void, Void, Void> {
+    public String getStatistics(Message message) {
+        StringBuilder statistics = new StringBuilder();
+        Resources res = getResources();
+        statistics.append(message.getAlbums()+" ");
+        statistics.append(res.getQuantityString(R.plurals.albums, (int) message.getAlbums())+", ");
+        statistics.append(message.getTracks()+" ");
+        statistics.append(res.getQuantityString(R.plurals.songs, (int) message.getTracks()));
+        return statistics.toString();
+    }
+
+    private class ParseTask extends AsyncTask<Void, Message, Void> {
 
         HttpURLConnection urlConnection = null;
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Void doInBackground(Void... paramURL) {
             try {
                 URL url = new URL("http://cache-default06g.cdn.yandex.net/download.cdn.yandex.net/mobilization-2016/artists.json");
 
@@ -139,34 +173,34 @@ public class MainActivity extends AppCompatActivity {
                 urlConnection.connect();
 
                 InputStream inputStream = urlConnection.getInputStream();
-                messages = readJsonStream(inputStream);
+
+                JsonReader reader = new JsonReader(new InputStreamReader(inputStream, "UTF-8"));
+
+                try {
+                    reader.beginArray();
+                    while (reader.hasNext()) {
+                        Message newMessage = readMessage(reader);
+                        publishProgress(newMessage);
+                    }
+                    reader.endArray();
+                } finally {
+                    reader.close();
+                }
+
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
             return null;
         }
 
         @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-
-            try {
-                // Перебираем и выводим элементы
-                for (Message message: messages) {
-
-                    long id = message.getId();
-                    String name = message.getName();
-                    String link = message.getLink();
-
-                    Log.d(LOG_TAG, "id: " + id);
-                    Log.d(LOG_TAG, "name: " + name);
-                    Log.d(LOG_TAG, "link: " + link);
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        protected void onProgressUpdate(Message... value) {
+            super.onProgressUpdate(value);
+            messages.add(value[0]);
+            jsonAdapter.notifyDataSetChanged();
         }
+
     }
 }

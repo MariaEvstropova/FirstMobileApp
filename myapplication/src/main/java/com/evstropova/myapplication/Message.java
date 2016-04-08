@@ -40,6 +40,10 @@ public class Message {
         return genres;
     }
 
+    public long getTracks() {
+        return tracks;
+    }
+
     public long getAlbums() {
         return albums;
     }
@@ -54,5 +58,15 @@ public class Message {
 
     public Cover getCover() {
         return cover;
+    }
+
+    public String getGenresString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (String genre: genres) {
+            stringBuilder.append(genre);
+        }
+
+        return stringBuilder.toString();
     }
 }
