@@ -12,10 +12,12 @@
         android:layout_alignParentLeft="true" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="New Button"
         android:id="@+id/singer_name"
+        style="?android:attr/borderlessButtonStyle"
+        android:gravity="left"
+        android:background="@null"
         android:layout_margin="5dp"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/cover_small" />

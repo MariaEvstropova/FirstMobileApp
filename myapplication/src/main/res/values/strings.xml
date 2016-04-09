@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Исполнители</string>
     <string name="singers">Исполнители</string>
     <string name="URL">http://cache-default06g.cdn.yandex.net/download.cdn.yandex.net/mobilization-2016/artists.json</string>
 
