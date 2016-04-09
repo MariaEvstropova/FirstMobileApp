@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,9 +56,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class JsonAdapter extends ArrayAdapter<Message> {
+        Picasso mPicasso;
 
         public JsonAdapter (Context context) {
             super(context, R.layout.try_relative, messages);
+            mPicasso = Picasso.with(context);
         }
 
         @Override
@@ -68,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
                 convertView = LayoutInflater.from(getContext())
                         .inflate(R.layout.try_relative, parent, false);
             }
+
+            ImageView imageView = (ImageView) convertView.findViewById(R.id.cover_small);
+            mPicasso.load(message.getCover().getSmall()).into(imageView);
 
             ((TextView) convertView.findViewById(R.id.text_genre))
                     .setText(message.getGenresString());
