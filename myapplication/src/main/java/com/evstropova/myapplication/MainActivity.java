@@ -2,6 +2,7 @@ package com.evstropova.myapplication;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public ListView listView;
     public JsonAdapter jsonAdapter;
     public ParseTask jsonParse = new ParseTask();
+    final String LOG_TAG = "myLogs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,19 @@ public class MainActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.list_view);
         jsonAdapter = new JsonAdapter(this);
         listView.setAdapter(jsonAdapter);
+        listView.setClickable(true);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                intent.putExtra("cover",messages.get(position).getCover().getBig());
+                intent.putExtra("genres", messages.get(position).getGenresString());
+                intent.putExtra("statistics", getStatistics(messages.get(position)));
+                intent.putExtra("description", messages.get(position).getDescription());
+                startActivity(intent);
+            }
+        });
     }
 
     private class JsonAdapter extends ArrayAdapter<Message> {
@@ -81,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             ((TextView) convertView.findViewById(R.id.text_statistics))
                     .setText(getStatistics(message));
 
-            ((Button) convertView.findViewById(R.id.singer_name))
+            ((TextView) convertView.findViewById(R.id.singer_name))
                     .setText(message.getName());
 
             return convertView;

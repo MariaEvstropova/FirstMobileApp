@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:descendantFocusability="blocksDescendants"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -11,16 +12,16 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true" />
 
-    <Button
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Singer name"
         android:id="@+id/singer_name"
-        style="?android:attr/borderlessButtonStyle"
-        android:gravity="left"
-        android:background="@null"
         android:layout_margin="5dp"
+        android:textSize="16dp"
+        android:textStyle="bold"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/cover_small" />
+        android:layout_toRightOf="@+id/cover_small"  />
 
     <TextView
         android:layout_width="wrap_content"
