@@ -41,5 +41,4 @@
         android:layout_alignBottom="@+id/cover_small"
         android:layout_toRightOf="@+id/cover_small"/>
 
-
 </RelativeLayout>
