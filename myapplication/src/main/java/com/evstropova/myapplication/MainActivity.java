@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                intent.putExtra("name", messages.get(position).getName());
                 intent.putExtra("cover",messages.get(position).getCover().getBig());
                 intent.putExtra("genres", messages.get(position).getGenresString());
                 intent.putExtra("statistics", getStatistics(messages.get(position)));
