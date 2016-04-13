@@ -1,5 +1,6 @@
 package com.evstropova.myapplication;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -28,14 +29,16 @@ public class MainActivity extends AppCompatActivity {
     private List<Message> messages = new ArrayList<Message>();
     public ListView listView;
     public JsonAdapter jsonAdapter;
-    public ParseTask jsonParse = new ParseTask();
+    public ParseTask jsonParse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
 
-        jsonParse.execute();
+        String urlString = getString(R.string.URL);
+        jsonParse = new ParseTask();
+        jsonParse.execute(urlString);
 
         listView = (ListView) findViewById(R.id.list_view);
         jsonAdapter = new JsonAdapter(this);
@@ -176,14 +179,14 @@ public class MainActivity extends AppCompatActivity {
         return builder.toString();
     }
 
-    private class ParseTask extends AsyncTask<Void, Message, Void> {
+    private class ParseTask extends AsyncTask<String, Message, Void> {
 
         HttpURLConnection urlConnection = null;
 
         @Override
-        protected Void doInBackground(Void... paramURL) {
+        protected Void doInBackground(String... paramURL) {
             try {
-                URL url = new URL("http://cache-default06g.cdn.yandex.net/download.cdn.yandex.net/mobilization-2016/artists.json");
+                URL url = new URL(paramURL[0]);
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
