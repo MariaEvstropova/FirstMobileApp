@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("statistics", getStatistics(messages.get(position)));
                 intent.putExtra("description", messages.get(position).getDescription());
                 startActivity(intent);
+                overridePendingTransition(R.anim.translate, R.anim.alpha);
             }
         });
     }
