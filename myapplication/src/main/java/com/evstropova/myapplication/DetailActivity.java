@@ -7,6 +7,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
+/**
+ * Класс, определяющий вспомогательный экран приложения.
+ *
+ * @author Maria Evstropova
+ * @version 1.0
+ */
 public class DetailActivity extends AppCompatActivity {
     ImageView coverBig;
     TextView textGenre;
@@ -18,9 +24,13 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        //"Включить" отображение кнопки возврата во "встроенном" в AppCompatActivity Action Bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getIntent().getStringExtra("name"));
 
+        //Определяем элементы экрана приложения, и загружаем в них информацию, извлекаемую из объекта Intent.
+        //Для загрузки изображения служит ссылка, передаваемая в виде строки.
+        //Загрузка производтся при помощи сторонней библиотеки Picasso.
         coverBig = (ImageView) findViewById(R.id.cover_big);
         Picasso.with(this).load(getIntent().getStringExtra("cover")).into(coverBig);
         textGenre = (TextView) findViewById(R.id.text_genre);
